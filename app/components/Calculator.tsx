@@ -237,6 +237,9 @@ export default function Calculator() {
                     <p className="text-2xl font-bold text-shakepay-blue">
                       {formatNumber(result.totalSats)} sats
                     </p>
+                    <p className="text-sm font-medium text-orange-500 mt-1">
+                      ({(result.totalSats / 100000000).toFixed(8)} BTC)
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Total Value (USD)</p>
@@ -257,6 +260,9 @@ export default function Calculator() {
                     <p className="text-sm text-gray-500">Average Sats/Day</p>
                     <p className="text-2xl font-bold text-shakepay-blue">
                       {formatNumber(result.averageSatsPerDay)} sats
+                    </p>
+                    <p className="text-sm font-medium text-orange-500 mt-1">
+                      ({(result.averageSatsPerDay / 100000000).toFixed(8)} BTC)
                     </p>
                   </div>
                   <div>
