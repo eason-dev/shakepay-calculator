@@ -48,10 +48,10 @@ export default function Calculator() {
           setDaysInput(urlDays);
         }
 
-        if (urlPrice) {
-          setBtcPriceInput(urlPrice);
-        } else {
+        if (urlPrice === 'current' || !urlPrice) {
           setBtcPriceInput(price.toString());
+        } else {
+          setBtcPriceInput(urlPrice);
         }
 
         setIsInitialized(true);
@@ -68,7 +68,7 @@ export default function Calculator() {
           setDaysInput(urlDays);
         }
 
-        if (!urlPrice) {
+        if (urlPrice === 'current' || !urlPrice) {
           setBtcPriceInput('95000');
         } else {
           setBtcPriceInput(urlPrice);
@@ -89,10 +89,19 @@ export default function Calculator() {
 
     const params = new URLSearchParams();
     if (daysInput) params.set('days', daysInput);
-    if (btcPriceInput) params.set('price', btcPriceInput);
+
+    // Use "current" if price matches current BTC price, otherwise use actual value
+    if (btcPriceInput) {
+      const priceValue = parseFloat(btcPriceInput);
+      if (priceValue === currentBtcPrice) {
+        params.set('price', 'current');
+      } else {
+        params.set('price', btcPriceInput);
+      }
+    }
 
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-  }, [daysInput, btcPriceInput, isInitialized, router, pathname]);
+  }, [daysInput, btcPriceInput, isInitialized, router, pathname, currentBtcPrice]);
 
   // Calculate rewards whenever inputs change
   useEffect(() => {
@@ -228,7 +237,7 @@ export default function Calculator() {
                 <button
                   onClick={() => setBtcPriceInput(currentBtcPrice.toString())}
                   className={`px-3 py-1.5 text-sm rounded-md transition ${
-                    parseFloat(btcPriceInput) === currentBtcPrice
+                    searchParams.get('price') === 'current' || parseFloat(btcPriceInput) === currentBtcPrice
                       ? 'bg-shakepay-blue text-white ring-2 ring-shakepay-blue ring-offset-1'
                       : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                   }`}
