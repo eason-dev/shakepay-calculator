@@ -365,8 +365,16 @@ export default function Calculator() {
         {/* Footer Info */}
         <div className="mt-8 text-center text-sm text-gray-500">
           <p>
-            Based on Shakepay&apos;s ShakingSats rewards program. Earn 21-1000 sats
-            daily by maintaining your streak.
+            Based on Shakepay&apos;s{' '}
+            <a
+              href="https://help.shakepay.com/en/articles/5133748-shakingsats"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-shakepay-blue hover:underline"
+            >
+              ShakingSats
+            </a>{' '}
+            rewards program. Earn 21-1000 sats daily by maintaining your streak.
           </p>
           <p className="mt-2">
             Data source:{' '}
