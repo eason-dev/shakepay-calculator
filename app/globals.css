@@ -41,3 +41,20 @@ body {
 .animate-fade-in {
   animation: fadeIn 0.2s ease-in-out;
 }
+
+@keyframes shake {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: rotate(-10deg);
+  }
+  20%, 40%, 60%, 80% {
+    transform: rotate(10deg);
+  }
+}
+
+.animate-shake {
+  animation: shake 2s ease-in-out infinite;
+  display: inline-block;
+}

@@ -130,7 +130,7 @@ export default function Calculator() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-shakepay-blue mb-2">
-            Shakepay ShakingSats Calculator
+            <span className="inline-block animate-shake">📳</span> Shakepay ShakingSats Calculator
           </h1>
           <p className="text-gray-600">
             Calculate your potential Bitcoin earnings from daily shaking
