@@ -53,8 +53,12 @@ export default function SupportPage() {
           <h1 className="text-4xl font-bold text-shakepay-blue mb-3">
             Support Me
           </h1>
-          <p className="text-gray-600 text-lg">
+          <p className="text-gray-600 text-lg mb-4">
             If you find this calculator helpful, buy me a coffee or follow me for more useful tools!
+          </p>
+          <p className="text-gray-500 text-base max-w-2xl mx-auto">
+            This is an unofficial calculator I built for myself and you, to help us keep the streak going together.
+            Not affiliated with Shakepay — just a tool made by someone who loves ShakingSats!
           </p>
         </div>
 
