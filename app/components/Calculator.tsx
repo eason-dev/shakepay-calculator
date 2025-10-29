@@ -10,10 +10,8 @@ import {
 import Chart from './Chart';
 
 export default function Calculator() {
-  const [days, setDays] = useState<number>(365);
-  const [btcPrice, setBtcPrice] = useState<number>(0);
-  const [currency, setCurrency] = useState<'USD' | 'CAD'>('USD');
-  const [usdToCAD, setUsdToCAD] = useState<number>(1.35);
+  const [daysInput, setDaysInput] = useState<string>('365');
+  const [btcPriceInput, setBtcPriceInput] = useState<string>('0');
   const [result, setResult] = useState<CalculationResult | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -26,13 +24,13 @@ export default function Calculator() {
         );
         const data = await response.json();
         if (data.bitcoin?.usd) {
-          setBtcPrice(data.bitcoin.usd);
+          setBtcPriceInput(data.bitcoin.usd.toString());
         } else {
-          setBtcPrice(95000); // Fallback price
+          setBtcPriceInput('95000'); // Fallback price
         }
       } catch (error) {
         console.error('Failed to fetch BTC price:', error);
-        setBtcPrice(95000); // Fallback price
+        setBtcPriceInput('95000'); // Fallback price
       } finally {
         setLoading(false);
       }
@@ -43,31 +41,23 @@ export default function Calculator() {
 
   // Calculate rewards whenever inputs change
   useEffect(() => {
-    if (btcPrice > 0 && days > 0) {
-      const calculationResult = calculateRewards(days, btcPrice, usdToCAD);
+    const days = parseInt(daysInput);
+    const btcPrice = parseFloat(btcPriceInput);
+
+    if (!isNaN(days) && days > 0 && !isNaN(btcPrice) && btcPrice > 0) {
+      const calculationResult = calculateRewards(days, btcPrice);
       setResult(calculationResult);
+    } else {
+      setResult(null);
     }
-  }, [days, btcPrice, usdToCAD]);
+  }, [daysInput, btcPriceInput]);
 
   const handleDaysChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value);
-    if (!isNaN(value) && value > 0) {
-      setDays(Math.min(value, 10000)); // Cap at 10000 days
-    }
+    setDaysInput(e.target.value);
   };
 
   const handleBtcPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseFloat(e.target.value);
-    if (!isNaN(value) && value > 0) {
-      setBtcPrice(value);
-    }
-  };
-
-  const handleUsdToCadChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseFloat(e.target.value);
-    if (!isNaN(value) && value > 0) {
-      setUsdToCAD(value);
-    }
+    setBtcPriceInput(e.target.value);
   };
 
   if (loading) {
@@ -105,10 +95,9 @@ export default function Calculator() {
               <input
                 type="number"
                 id="days"
-                value={days}
+                value={daysInput}
                 onChange={handleDaysChange}
                 min="1"
-                max="10000"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-shakepay-blue focus:border-transparent outline-none transition"
               />
             </div>
@@ -119,63 +108,15 @@ export default function Calculator() {
                 htmlFor="btcPrice"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
-                Bitcoin Price ({currency})
+                Bitcoin Price (USD)
               </label>
               <input
                 type="number"
                 id="btcPrice"
-                value={btcPrice}
+                value={btcPriceInput}
                 onChange={handleBtcPriceChange}
                 min="0"
                 step="100"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-shakepay-blue focus:border-transparent outline-none transition"
-              />
-            </div>
-
-            {/* Currency Selection */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Display Currency
-              </label>
-              <div className="flex space-x-4">
-                <button
-                  onClick={() => setCurrency('USD')}
-                  className={`flex-1 py-3 px-4 rounded-lg font-medium transition ${
-                    currency === 'USD'
-                      ? 'bg-shakepay-blue text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  USD
-                </button>
-                <button
-                  onClick={() => setCurrency('CAD')}
-                  className={`flex-1 py-3 px-4 rounded-lg font-medium transition ${
-                    currency === 'CAD'
-                      ? 'bg-shakepay-blue text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  CAD
-                </button>
-              </div>
-            </div>
-
-            {/* USD to CAD Rate */}
-            <div>
-              <label
-                htmlFor="usdToCAD"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                USD to CAD Rate
-              </label>
-              <input
-                type="number"
-                id="usdToCAD"
-                value={usdToCAD}
-                onChange={handleUsdToCadChange}
-                min="0"
-                step="0.01"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-shakepay-blue focus:border-transparent outline-none transition"
               />
             </div>
@@ -199,11 +140,9 @@ export default function Calculator() {
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Total Value</p>
-                    <p className="text-2xl font-bold text-shakepay-blue">
-                      {currency === 'USD'
-                        ? formatCurrency(result.totalValueUSD, 'USD')
-                        : formatCurrency(result.totalValueCAD, 'CAD')}
+                    <p className="text-sm text-gray-500">Total Value (USD)</p>
+                    <p className="text-2xl font-bold text-green-600">
+                      {formatCurrency(result.totalValueUSD)}
                     </p>
                   </div>
                 </div>
@@ -222,11 +161,9 @@ export default function Calculator() {
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Average Value/Day</p>
-                    <p className="text-2xl font-bold text-shakepay-blue">
-                      {currency === 'USD'
-                        ? formatCurrency(result.averageValuePerDayUSD, 'USD')
-                        : formatCurrency(result.averageValuePerDayCAD, 'CAD')}
+                    <p className="text-sm text-gray-500">Average Value/Day (USD)</p>
+                    <p className="text-2xl font-bold text-green-600">
+                      {formatCurrency(result.averageValuePerDayUSD)}
                     </p>
                   </div>
                 </div>
@@ -238,7 +175,7 @@ export default function Calculator() {
               <h3 className="text-lg font-semibold text-gray-700 mb-4">
                 Earnings Over Time
               </h3>
-              <Chart data={result.dailyData} currency={currency} />
+              <Chart data={result.dailyData} />
             </div>
           </>
         )}
