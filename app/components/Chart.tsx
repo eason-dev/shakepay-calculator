@@ -23,6 +23,19 @@ export default function Chart({ data }: ChartProps) {
       ? data.filter((_, index) => index % Math.ceil(data.length / 100) === 0 || index === data.length - 1)
       : data;
 
+  // Calculate max values for both axes to ensure proportional scaling
+  const maxSats = Math.max(...data.map(d => d.totalSats));
+  const maxUSD = Math.max(...data.map(d => d.totalUSD));
+
+  // Calculate the ratio to maintain proportional relationship
+  // USD = (sats / 100,000,000) × btcPrice
+  // So: btcPrice = (maxUSD × 100,000,000) / maxSats
+  const btcPrice = maxSats > 0 ? (maxUSD * 100000000) / maxSats : 1;
+
+  // Set domains with proper padding (10% above max for visual spacing)
+  const usdDomain = [0, maxUSD * 1.1];
+  const satsDomain = [0, maxSats * 1.1];
+
   const formatYAxis = (value: number) => {
     if (value >= 1000000) {
       return `$${(value / 1000000).toFixed(1)}M`;
@@ -86,6 +99,7 @@ export default function Chart({ data }: ChartProps) {
           />
           <YAxis
             yAxisId="left"
+            domain={usdDomain}
             tickFormatter={formatYAxis}
             label={{
               value: 'Total Value (USD)',
@@ -97,6 +111,7 @@ export default function Chart({ data }: ChartProps) {
           <YAxis
             yAxisId="right"
             orientation="right"
+            domain={satsDomain}
             tickFormatter={formatSatsAxis}
             label={{
               value: 'Total Sats',
