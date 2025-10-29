@@ -5,11 +5,14 @@ A Next.js web application to calculate and visualize potential Bitcoin earnings 
 ## Features
 
 - 📊 **Interactive Calculator**: Calculate earnings based on streak length
-- 💰 **Currency Support**: View results in USD or CAD
-- 📈 **Visual Charts**: Line graphs showing cumulative sats and value over time
+- 💰 **USD Support**: View results in USD with BTC conversions
+- 📈 **Visual Charts**: Dual-axis line graphs showing cumulative sats and USD value over time
 - 🎨 **Shakepay Theme**: Official Shakepay blue color scheme
 - 📱 **Responsive Design**: Works on desktop and mobile devices
 - 🔄 **Live BTC Price**: Automatically fetches current Bitcoin price
+- 🔗 **Shareable Links**: URL parameters persist calculator settings
+- 🎯 **Quick Presets**: Fast selection buttons for common values
+- 💝 **Support Page**: Bitcoin donation support with QR codes
 
 ## How It Works
 
@@ -51,8 +54,30 @@ npm run dev
 
 1. **Enter Streak Days**: Input how many days you want to calculate (default: 365)
 2. **Set Bitcoin Price**: Adjust the BTC price or use the auto-fetched current price
-3. **Choose Currency**: Toggle between USD and CAD display
-4. **View Results**: See your potential earnings and interactive charts
+3. **Use Preset Buttons**: Quick selection for common streak lengths (100, 365, 1000, 3000) and BTC prices
+4. **View Results**: See your potential earnings with sats, BTC, and USD values
+5. **Share Your Calculation**: Copy the URL to share your specific scenario
+
+## Configuration
+
+### Support Page Setup
+
+Update the following in `app/support/page.tsx`:
+
+```typescript
+const shaketag = '@yourname'; // Your Shakepay shaketag
+const bitcoinAddress = 'bc1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'; // Your Bitcoin address
+const twitterHandle = '@yourhandle'; // Your Twitter handle
+const twitterUrl = 'https://twitter.com/yourhandle';
+```
+
+### SEO & Metadata
+
+Update the following in `app/layout.tsx`:
+
+- `metadataBase`: Your actual domain URL
+- `twitter.creator`: Your Twitter handle
+- Create an OpenGraph image at `public/og-image.png` (1200x630px recommended)
 
 ## Technology Stack
 
@@ -60,6 +85,7 @@ npm run dev
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS 4
 - **Charts**: Recharts
+- **QR Codes**: qrcode.react
 - **Price API**: CoinGecko API
 
 ## Project Structure
