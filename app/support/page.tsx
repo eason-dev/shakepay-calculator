@@ -4,11 +4,10 @@ import { QRCodeSVG } from 'qrcode.react';
 import Link from 'next/link';
 
 export default function SupportPage() {
-  // TODO: Replace with your actual information
-  const shaketag = '@yourname'; // Your Shakepay shaketag
-  const bitcoinAddress = 'bc1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'; // Your Bitcoin address
-  const twitterHandle = '@yourhandle'; // Your Twitter handle
-  const twitterUrl = 'https://twitter.com/yourhandle';
+  const shaketag = '@easonchang';
+  const bitcoinAddress = 'bc1qgmlzwhlkvkquwqxkefwfzqfvhjkw4j8wdf5j6sdmt3mrgc7rehxsw9mn9k';
+  const twitterHandle = '@easondev';
+  const twitterUrl = 'https://x.com/easondev';
 
   const copyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);

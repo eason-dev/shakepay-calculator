@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     title: "Shakepay ShakingSats Calculator",
     description: "Calculate your potential Bitcoin earnings from Shakepay's ShakingSats rewards!",
     images: ['/og-image.png'], // TODO: Create an OG image
-    creator: '@yourhandle', // TODO: Update with your Twitter handle
+    creator: '@easondev',
   },
   robots: {
     index: true,
