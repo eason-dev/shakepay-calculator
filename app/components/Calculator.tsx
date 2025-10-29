@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import {
   calculateRewards,
   formatCurrency,
@@ -10,13 +11,18 @@ import {
 import Chart from './Chart';
 
 export default function Calculator() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
   const [daysInput, setDaysInput] = useState<string>('365');
   const [btcPriceInput, setBtcPriceInput] = useState<string>('0');
   const [currentBtcPrice, setCurrentBtcPrice] = useState<number>(0);
   const [result, setResult] = useState<CalculationResult | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
-  // Fetch current BTC price on mount
+  // Initialize from URL params and fetch BTC price
   useEffect(() => {
     const fetchBTCPrice = async () => {
       try {
@@ -24,25 +30,48 @@ export default function Calculator() {
           'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
         );
         const data = await response.json();
-        if (data.bitcoin?.usd) {
-          const price = data.bitcoin.usd;
-          setBtcPriceInput(price.toString());
-          setCurrentBtcPrice(price);
-        } else {
-          setBtcPriceInput('95000'); // Fallback price
-          setCurrentBtcPrice(95000);
+        const price = data.bitcoin?.usd || 95000;
+        setCurrentBtcPrice(price);
+
+        // Read URL parameters
+        const urlDays = searchParams.get('days');
+        const urlPrice = searchParams.get('price');
+
+        // Set initial values from URL or defaults
+        if (urlDays) {
+          setDaysInput(urlDays);
         }
+
+        if (urlPrice) {
+          setBtcPriceInput(urlPrice);
+        } else {
+          setBtcPriceInput(price.toString());
+        }
+
+        setIsInitialized(true);
       } catch (error) {
         console.error('Failed to fetch BTC price:', error);
-        setBtcPriceInput('95000'); // Fallback price
         setCurrentBtcPrice(95000);
+        setBtcPriceInput('95000');
+        setIsInitialized(true);
       } finally {
         setLoading(false);
       }
     };
 
     fetchBTCPrice();
-  }, []);
+  }, [searchParams]);
+
+  // Update URL params when inputs change
+  useEffect(() => {
+    if (!isInitialized) return;
+
+    const params = new URLSearchParams();
+    if (daysInput) params.set('days', daysInput);
+    if (btcPriceInput) params.set('price', btcPriceInput);
+
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  }, [daysInput, btcPriceInput, isInitialized, router, pathname]);
 
   // Calculate rewards whenever inputs change
   useEffect(() => {
