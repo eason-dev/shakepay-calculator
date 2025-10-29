@@ -77,6 +77,9 @@ export default function Chart({ data }: ChartProps) {
         <div className="bg-white p-4 border border-gray-300 rounded-lg shadow-lg">
           <p className="font-semibold text-gray-800 mb-2">Day {label}</p>
           <p className="text-sm text-gray-600">
+            Daily Sats: <span className="font-medium text-shakepay-blue">{formatNumber(data.dailySats)}</span>
+          </p>
+          <p className="text-sm text-gray-600">
             Total Sats: <span className="font-medium text-shakepay-blue">{formatNumber(data.totalSats)}</span>
           </p>
           <p className="text-sm text-gray-600">
