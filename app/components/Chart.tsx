@@ -33,6 +33,16 @@ export default function Chart({ data }: ChartProps) {
     return `$${value.toFixed(0)}`;
   };
 
+  const formatSatsAxis = (value: number) => {
+    if (value >= 1000000) {
+      return `${(value / 1000000).toFixed(1)}M`;
+    }
+    if (value >= 1000) {
+      return `${(value / 1000).toFixed(1)}K`;
+    }
+    return value.toFixed(0);
+  };
+
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -75,23 +85,45 @@ export default function Chart({ data }: ChartProps) {
             stroke="#6b7280"
           />
           <YAxis
+            yAxisId="left"
             tickFormatter={formatYAxis}
             label={{
               value: 'Total Value (USD)',
               angle: -90,
               position: 'insideLeft',
             }}
-            stroke="#6b7280"
+            stroke="#10B981"
+          />
+          <YAxis
+            yAxisId="right"
+            orientation="right"
+            tickFormatter={formatSatsAxis}
+            label={{
+              value: 'Total Sats',
+              angle: 90,
+              position: 'insideRight',
+            }}
+            stroke="#0E67FF"
           />
           <Tooltip content={<CustomTooltip />} />
           <Legend />
           <Line
+            yAxisId="left"
             type="monotone"
             dataKey="totalUSD"
             stroke="#10B981"
             strokeWidth={2}
             dot={false}
             name="Total Value (USD)"
+          />
+          <Line
+            yAxisId="right"
+            type="monotone"
+            dataKey="totalSats"
+            stroke="#0E67FF"
+            strokeWidth={2}
+            dot={false}
+            name="Total Sats"
           />
         </LineChart>
       </ResponsiveContainer>

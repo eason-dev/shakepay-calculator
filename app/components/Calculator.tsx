@@ -12,6 +12,7 @@ import Chart from './Chart';
 export default function Calculator() {
   const [daysInput, setDaysInput] = useState<string>('365');
   const [btcPriceInput, setBtcPriceInput] = useState<string>('0');
+  const [currentBtcPrice, setCurrentBtcPrice] = useState<number>(0);
   const [result, setResult] = useState<CalculationResult | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -24,13 +25,17 @@ export default function Calculator() {
         );
         const data = await response.json();
         if (data.bitcoin?.usd) {
-          setBtcPriceInput(data.bitcoin.usd.toString());
+          const price = data.bitcoin.usd;
+          setBtcPriceInput(price.toString());
+          setCurrentBtcPrice(price);
         } else {
           setBtcPriceInput('95000'); // Fallback price
+          setCurrentBtcPrice(95000);
         }
       } catch (error) {
         console.error('Failed to fetch BTC price:', error);
         setBtcPriceInput('95000'); // Fallback price
+        setCurrentBtcPrice(95000);
       } finally {
         setLoading(false);
       }
@@ -98,8 +103,50 @@ export default function Calculator() {
                 value={daysInput}
                 onChange={handleDaysChange}
                 min="1"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-shakepay-blue focus:border-transparent outline-none transition"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-shakepay-blue focus:border-transparent outline-none transition text-gray-900"
               />
+              <div className="flex flex-wrap gap-2 mt-3">
+                <button
+                  onClick={() => setDaysInput('100')}
+                  className={`px-3 py-1.5 text-sm rounded-md transition ${
+                    daysInput === '100'
+                      ? 'bg-shakepay-blue text-white ring-2 ring-shakepay-blue ring-offset-1'
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                  }`}
+                >
+                  100
+                </button>
+                <button
+                  onClick={() => setDaysInput('365')}
+                  className={`px-3 py-1.5 text-sm rounded-md transition ${
+                    daysInput === '365'
+                      ? 'bg-shakepay-blue text-white ring-2 ring-shakepay-blue ring-offset-1'
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                  }`}
+                >
+                  365
+                </button>
+                <button
+                  onClick={() => setDaysInput('1000')}
+                  className={`px-3 py-1.5 text-sm rounded-md transition ${
+                    daysInput === '1000'
+                      ? 'bg-shakepay-blue text-white ring-2 ring-shakepay-blue ring-offset-1'
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                  }`}
+                >
+                  1000
+                </button>
+                <button
+                  onClick={() => setDaysInput('3000')}
+                  className={`px-3 py-1.5 text-sm rounded-md transition ${
+                    daysInput === '3000'
+                      ? 'bg-shakepay-blue text-white ring-2 ring-shakepay-blue ring-offset-1'
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                  }`}
+                >
+                  3000
+                </button>
+              </div>
             </div>
 
             {/* BTC Price Input */}
@@ -117,8 +164,60 @@ export default function Calculator() {
                 onChange={handleBtcPriceChange}
                 min="0"
                 step="100"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-shakepay-blue focus:border-transparent outline-none transition"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-shakepay-blue focus:border-transparent outline-none transition text-gray-900"
               />
+              <div className="flex flex-wrap gap-2 mt-3">
+                <button
+                  onClick={() => setBtcPriceInput(currentBtcPrice.toString())}
+                  className={`px-3 py-1.5 text-sm rounded-md transition ${
+                    parseFloat(btcPriceInput) === currentBtcPrice
+                      ? 'bg-shakepay-blue text-white ring-2 ring-shakepay-blue ring-offset-1'
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                  }`}
+                >
+                  Current ({formatNumber(currentBtcPrice)})
+                </button>
+                <button
+                  onClick={() => setBtcPriceInput('100000')}
+                  className={`px-3 py-1.5 text-sm rounded-md transition ${
+                    btcPriceInput === '100000'
+                      ? 'bg-shakepay-blue text-white ring-2 ring-shakepay-blue ring-offset-1'
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                  }`}
+                >
+                  100K
+                </button>
+                <button
+                  onClick={() => setBtcPriceInput('200000')}
+                  className={`px-3 py-1.5 text-sm rounded-md transition ${
+                    btcPriceInput === '200000'
+                      ? 'bg-shakepay-blue text-white ring-2 ring-shakepay-blue ring-offset-1'
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                  }`}
+                >
+                  200K
+                </button>
+                <button
+                  onClick={() => setBtcPriceInput('500000')}
+                  className={`px-3 py-1.5 text-sm rounded-md transition ${
+                    btcPriceInput === '500000'
+                      ? 'bg-shakepay-blue text-white ring-2 ring-shakepay-blue ring-offset-1'
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                  }`}
+                >
+                  500K
+                </button>
+                <button
+                  onClick={() => setBtcPriceInput('1000000')}
+                  className={`px-3 py-1.5 text-sm rounded-md transition ${
+                    btcPriceInput === '1000000'
+                      ? 'bg-shakepay-blue text-white ring-2 ring-shakepay-blue ring-offset-1'
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                  }`}
+                >
+                  1M
+                </button>
+              </div>
             </div>
           </div>
         </div>
