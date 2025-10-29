@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     siteName: "Shakepay ShakingSats Calculator",
     images: [
       {
-        url: '/og-image.png', // TODO: Create an OG image at public/og-image.png (1200x630px)
+        url: '/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Shakepay ShakingSats Calculator Preview',
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: "Shakepay ShakingSats Calculator",
     description: "Calculate your potential Bitcoin earnings from Shakepay's ShakingSats rewards!",
-    images: ['/og-image.png'], // TODO: Create an OG image
+    images: ['/og-image.png'],
     creator: '@easondev',
   },
   robots: {
