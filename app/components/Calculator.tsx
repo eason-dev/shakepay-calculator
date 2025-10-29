@@ -29,16 +29,14 @@ export default function Calculator() {
       try {
         setPriceLoading(true);
         setPriceFetchError(false);
-        const response = await fetch(
-          'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
-        );
+        const response = await fetch('/api/btc-price');
 
         if (!response.ok) {
           throw new Error('Failed to fetch BTC price');
         }
 
         const data = await response.json();
-        const price = data.bitcoin?.usd || 95000;
+        const price = data.price || 95000;
         setCurrentBtcPrice(price);
 
         // Read URL parameters
