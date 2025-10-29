@@ -96,8 +96,11 @@ export default function Chart({ data }: ChartProps) {
 
   return (
     <div className="w-full">
-      <ResponsiveContainer width="100%" height={400}>
-        <LineChart data={chartData}>
+      <ResponsiveContainer width="100%" height={450}>
+        <LineChart
+          data={chartData}
+          margin={{ top: 40, right: 30, left: 30, bottom: 30 }}
+        >
           <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
           <XAxis
             dataKey="day"
@@ -110,10 +113,13 @@ export default function Chart({ data }: ChartProps) {
             tickFormatter={formatYAxis}
             label={{
               value: 'Total Value (USD)',
-              angle: -90,
-              position: 'insideLeft',
+              angle: 0,
+              position: 'top',
+              offset: 20,
+              style: { textAnchor: 'middle', fill: '#10B981' },
             }}
             stroke="#10B981"
+            width={100}
           />
           <YAxis
             yAxisId="right"
@@ -122,13 +128,15 @@ export default function Chart({ data }: ChartProps) {
             tickFormatter={formatSatsAxis}
             label={{
               value: 'Total Sats',
-              angle: 90,
-              position: 'insideRight',
+              angle: 0,
+              position: 'top',
+              offset: 20,
+              style: { textAnchor: 'middle', fill: '#0E67FF' },
             }}
             stroke="#0E67FF"
+            width={100}
           />
           <Tooltip content={<CustomTooltip />} />
-          <Legend />
           <Line
             yAxisId="left"
             type="monotone"
