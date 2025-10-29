@@ -2,6 +2,7 @@
 
 import { QRCodeSVG } from 'qrcode.react';
 import Link from 'next/link';
+import { useState } from 'react';
 
 export default function SupportPage() {
   const shaketag = '@easonchang';
@@ -9,13 +10,43 @@ export default function SupportPage() {
   const twitterHandle = '@easondev';
   const twitterUrl = 'https://x.com/easondev';
 
+  const [toast, setToast] = useState<{ show: boolean; message: string }>({
+    show: false,
+    message: '',
+  });
+
   const copyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
-    alert(`${label} copied to clipboard!`);
+    setToast({ show: true, message: `${label} copied to clipboard!` });
+    setTimeout(() => {
+      setToast({ show: false, message: '' });
+    }, 2000);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+      {/* Toast Notification */}
+      {toast.show && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 animate-fade-in">
+          <div className="bg-gray-900 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2">
+            <svg
+              className="w-5 h-5 text-green-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <span>{toast.message}</span>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -87,7 +118,7 @@ export default function SupportPage() {
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-gray-800">Bitcoin</h2>
-                <p className="text-gray-600">Send BTC directly</p>
+                <p className="text-gray-600">Send BTC directly (Mainnet)</p>
               </div>
             </div>
 
@@ -122,43 +153,35 @@ export default function SupportPage() {
           {/* Social */}
           <div className="bg-white rounded-2xl shadow-lg p-8">
             <div className="flex items-center mb-4">
-              <div className="w-12 h-12 bg-blue-400 rounded-full flex items-center justify-center mr-4">
+              <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mr-4">
                 <svg
                   className="w-6 h-6 text-white"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                 </svg>
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-gray-800">Follow Me</h2>
-                <p className="text-gray-600">Connect on Twitter/X</p>
+                <p className="text-gray-600">Connect on X</p>
               </div>
             </div>
             <a
               href={twitterUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center px-6 py-3 bg-blue-400 text-white rounded-lg hover:bg-blue-500 transition font-medium"
+              className="inline-flex items-center px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition font-medium"
             >
               <svg
                 className="w-5 h-5 mr-2"
                 fill="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
               </svg>
               {twitterHandle}
             </a>
-          </div>
-
-          {/* Thank You Message */}
-          <div className="bg-gradient-to-r from-shakepay-blue to-blue-600 rounded-2xl shadow-lg p-8 text-center text-white">
-            <h2 className="text-2xl font-bold mb-2">Thank You!</h2>
-            <p className="text-lg opacity-90">
-              Your support helps keep this tool free and continuously improved for the community.
-            </p>
           </div>
         </div>
       </div>

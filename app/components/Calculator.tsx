@@ -331,7 +331,7 @@ export default function Calculator() {
               Shakepay Rewards
             </a>
           </p>
-          <p className="mt-3 flex items-center justify-center gap-4">
+          <p className="mt-3 flex items-center justify-center gap-4 text-gray-600">
             <a
               href="/support"
               className="inline-flex items-center text-shakepay-blue hover:underline font-medium"
@@ -351,6 +351,17 @@ export default function Calculator() {
               </svg>
               Support this project
             </a>
+            <span>
+              Built by{' '}
+              <a
+                href="https://x.com/easondev"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-700 hover:text-black hover:underline font-medium"
+              >
+                @easondev
+              </a>
+            </span>
           </p>
         </div>
       </div>
