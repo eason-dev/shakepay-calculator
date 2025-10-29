@@ -29,11 +29,11 @@ export const metadata: Metadata = {
   authors: [{ name: "Eason Chang" }],
   creator: "Eason Chang",
   publisher: "Eason Chang",
-  metadataBase: new URL('https://shakepay-calculator.vercel.app'), // TODO: Update with your actual domain
+  metadataBase: new URL('https://shakingsats.vercel.app'),
   openGraph: {
     title: "Shakepay ShakingSats Calculator",
     description: "Calculate your potential Bitcoin earnings from Shakepay's ShakingSats rewards. See how your sats add up over time!",
-    url: 'https://shakepay-calculator.vercel.app', // TODO: Update with your actual domain
+    url: 'https://shakingsats.vercel.app',
     siteName: "Shakepay ShakingSats Calculator",
     images: [
       {
@@ -65,11 +65,13 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon.ico',
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico' }
+    ],
+    shortcut: '/favicon.svg',
     apple: '/apple-touch-icon.png',
   },
-  manifest: '/site.webmanifest',
 };
 
 export default function RootLayout({
