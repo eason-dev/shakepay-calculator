@@ -16,19 +16,27 @@ export default function Calculator() {
   const pathname = usePathname();
 
   const [daysInput, setDaysInput] = useState<string>('365');
-  const [btcPriceInput, setBtcPriceInput] = useState<string>('0');
-  const [currentBtcPrice, setCurrentBtcPrice] = useState<number>(0);
+  const [btcPriceInput, setBtcPriceInput] = useState<string>('95000');
+  const [currentBtcPrice, setCurrentBtcPrice] = useState<number>(95000);
   const [result, setResult] = useState<CalculationResult | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [priceLoading, setPriceLoading] = useState<boolean>(true);
+  const [priceFetchError, setPriceFetchError] = useState<boolean>(false);
   const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
   // Initialize from URL params and fetch BTC price
   useEffect(() => {
     const fetchBTCPrice = async () => {
       try {
+        setPriceLoading(true);
+        setPriceFetchError(false);
         const response = await fetch(
           'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
         );
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch BTC price');
+        }
+
         const data = await response.json();
         const price = data.bitcoin?.usd || 95000;
         setCurrentBtcPrice(price);
@@ -51,11 +59,26 @@ export default function Calculator() {
         setIsInitialized(true);
       } catch (error) {
         console.error('Failed to fetch BTC price:', error);
+        setPriceFetchError(true);
         setCurrentBtcPrice(95000);
-        setBtcPriceInput('95000');
+
+        // Read URL parameters
+        const urlDays = searchParams.get('days');
+        const urlPrice = searchParams.get('price');
+
+        if (urlDays) {
+          setDaysInput(urlDays);
+        }
+
+        if (!urlPrice) {
+          setBtcPriceInput('95000');
+        } else {
+          setBtcPriceInput(urlPrice);
+        }
+
         setIsInitialized(true);
       } finally {
-        setLoading(false);
+        setPriceLoading(false);
       }
     };
 
@@ -93,14 +116,6 @@ export default function Calculator() {
   const handleBtcPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBtcPriceInput(e.target.value);
   };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-shakepay-blue text-xl">Loading BTC price...</div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -185,6 +200,12 @@ export default function Calculator() {
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
                 Bitcoin Price (USD)
+                {priceLoading && (
+                  <span className="ml-2 text-xs text-gray-500">Loading current price...</span>
+                )}
+                {priceFetchError && (
+                  <span className="ml-2 text-xs text-orange-500">Using default price</span>
+                )}
               </label>
               <input
                 type="number"

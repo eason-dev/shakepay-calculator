@@ -51,10 +51,10 @@ export default function SupportPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-shakepay-blue mb-3">
-            Support This Project
+            Support Me
           </h1>
           <p className="text-gray-600 text-lg">
-            If you find this calculator helpful, consider supporting its development!
+            If you find this calculator helpful, buy me a coffee or follow me for more useful tools!
           </p>
         </div>
 
@@ -150,6 +150,28 @@ export default function SupportPage() {
             </div>
           </div>
 
+          {/* Buy Me a Coffee */}
+          <div className="bg-white rounded-2xl shadow-lg p-8">
+            <div className="flex items-center mb-4">
+              <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center mr-4">
+                <span className="text-2xl">☕</span>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-800">Buy Me a Coffee</h2>
+                <p className="text-gray-600">Support my work with a coffee</p>
+              </div>
+            </div>
+            <a
+              href="https://buymeacoffee.com/easonchang"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center px-6 py-3 bg-yellow-400 text-gray-900 rounded-lg hover:bg-yellow-500 transition font-medium"
+            >
+              <span className="text-xl mr-2">☕</span>
+              Buy Me a Coffee
+            </a>
+          </div>
+
           {/* Social */}
           <div className="bg-white rounded-2xl shadow-lg p-8">
             <div className="flex items-center mb-4">
@@ -164,7 +186,7 @@ export default function SupportPage() {
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-gray-800">Follow Me</h2>
-                <p className="text-gray-600">Connect on X</p>
+                <p className="text-gray-600">Follow for more useful tools</p>
               </div>
             </div>
             <a

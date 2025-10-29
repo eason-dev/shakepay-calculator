@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Support - Shakepay ShakingSats Calculator",
-  description: "Support the Shakepay ShakingSats Calculator development. Send Bitcoin via Shakepay or donate directly.",
+  description: "Support me with a coffee or follow for more useful tools. Send Bitcoin via Shakepay or donate directly.",
   openGraph: {
     title: "Support - Shakepay ShakingSats Calculator",
-    description: "Support the Shakepay ShakingSats Calculator development. Send Bitcoin via Shakepay or donate directly.",
+    description: "Support me with a coffee or follow for more useful tools. Send Bitcoin via Shakepay or donate directly.",
   },
 };
 
