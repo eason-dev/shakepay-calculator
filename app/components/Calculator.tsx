@@ -17,11 +17,16 @@ export default function Calculator() {
 
   const [daysInput, setDaysInput] = useState<string>('365');
   const [btcPriceInput, setBtcPriceInput] = useState<string>('95000');
-  const [currentBtcPrice, setCurrentBtcPrice] = useState<number>(95000);
+  const [currency, setCurrency] = useState<'USD' | 'CAD'>('USD');
+  const [currentBtcPriceUSD, setCurrentBtcPriceUSD] = useState<number>(95000);
+  const [currentBtcPriceCAD, setCurrentBtcPriceCAD] = useState<number>(130000);
   const [result, setResult] = useState<CalculationResult | null>(null);
   const [priceLoading, setPriceLoading] = useState<boolean>(true);
   const [priceFetchError, setPriceFetchError] = useState<boolean>(false);
   const [isInitialized, setIsInitialized] = useState<boolean>(false);
+
+  // Get current BTC price based on selected currency
+  const currentBtcPrice = currency === 'USD' ? currentBtcPriceUSD : currentBtcPriceCAD;
 
   // Initialize from URL params and fetch BTC price
   useEffect(() => {
@@ -36,12 +41,22 @@ export default function Calculator() {
         }
 
         const data = await response.json();
-        const price = data.price || 95000;
-        setCurrentBtcPrice(price);
+        const priceUSD = data.usd || 95000;
+        const priceCAD = data.cad || 130000;
+        setCurrentBtcPriceUSD(priceUSD);
+        setCurrentBtcPriceCAD(priceCAD);
 
         // Read URL parameters
         const urlDays = searchParams.get('days');
         const urlPrice = searchParams.get('price');
+        const urlCurrency = searchParams.get('currency');
+
+        // Set currency from URL or default to USD
+        if (urlCurrency === 'CAD') {
+          setCurrency('CAD');
+        } else {
+          setCurrency('USD');
+        }
 
         // Set initial values from URL or defaults
         if (urlDays) {
@@ -49,7 +64,8 @@ export default function Calculator() {
         }
 
         if (urlPrice === 'current' || !urlPrice) {
-          setBtcPriceInput(price.toString());
+          const defaultPrice = urlCurrency === 'CAD' ? priceCAD : priceUSD;
+          setBtcPriceInput(defaultPrice.toString());
         } else {
           setBtcPriceInput(urlPrice);
         }
@@ -58,18 +74,27 @@ export default function Calculator() {
       } catch (error) {
         console.error('Failed to fetch BTC price:', error);
         setPriceFetchError(true);
-        setCurrentBtcPrice(95000);
+        setCurrentBtcPriceUSD(95000);
+        setCurrentBtcPriceCAD(130000);
 
         // Read URL parameters
         const urlDays = searchParams.get('days');
         const urlPrice = searchParams.get('price');
+        const urlCurrency = searchParams.get('currency');
+
+        // Set currency from URL or default to USD
+        if (urlCurrency === 'CAD') {
+          setCurrency('CAD');
+        } else {
+          setCurrency('USD');
+        }
 
         if (urlDays) {
           setDaysInput(urlDays);
         }
 
         if (urlPrice === 'current' || !urlPrice) {
-          setBtcPriceInput('95000');
+          setBtcPriceInput(urlCurrency === 'CAD' ? '130000' : '95000');
         } else {
           setBtcPriceInput(urlPrice);
         }
@@ -90,6 +115,9 @@ export default function Calculator() {
     const params = new URLSearchParams();
     if (daysInput) params.set('days', daysInput);
 
+    // Store currency in URL
+    params.set('currency', currency);
+
     // Use "current" if price matches current BTC price, otherwise use actual value
     if (btcPriceInput) {
       const priceValue = parseFloat(btcPriceInput);
@@ -101,7 +129,7 @@ export default function Calculator() {
     }
 
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-  }, [daysInput, btcPriceInput, isInitialized, router, pathname, currentBtcPrice]);
+  }, [daysInput, btcPriceInput, currency, isInitialized, router, pathname, currentBtcPrice]);
 
   // Calculate rewards whenever inputs change
   useEffect(() => {
@@ -122,6 +150,15 @@ export default function Calculator() {
 
   const handleBtcPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBtcPriceInput(e.target.value);
+  };
+
+  const handleCurrencyToggle = (newCurrency: 'USD' | 'CAD') => {
+    setCurrency(newCurrency);
+    // If current price is selected, update to the new currency's current price
+    if (searchParams.get('price') === 'current') {
+      const newCurrentPrice = newCurrency === 'USD' ? currentBtcPriceUSD : currentBtcPriceCAD;
+      setBtcPriceInput(newCurrentPrice.toString());
+    }
   };
 
   return (
@@ -212,18 +249,43 @@ export default function Calculator() {
 
             {/* BTC Price Input */}
             <div>
-              <label
-                htmlFor="btcPrice"
-                className="block text-base font-semibold text-gray-800 mb-2"
-              >
-                Bitcoin Price (USD)
-                {priceLoading && (
-                  <span className="ml-2 text-xs text-gray-500">Loading current price...</span>
-                )}
-                {priceFetchError && (
-                  <span className="ml-2 text-xs text-orange-500">Using default price</span>
-                )}
-              </label>
+              <div className="flex items-center justify-between mb-2">
+                <label
+                  htmlFor="btcPrice"
+                  className="text-base font-semibold text-gray-800"
+                >
+                  Bitcoin Price
+                  {priceLoading && (
+                    <span className="ml-2 text-xs text-gray-500 font-normal">Loading current price...</span>
+                  )}
+                  {priceFetchError && (
+                    <span className="ml-2 text-xs text-orange-500 font-normal">Using default price</span>
+                  )}
+                </label>
+                {/* Currency Toggle */}
+                <div className="inline-flex rounded-md border border-gray-300 bg-white">
+                  <button
+                    onClick={() => handleCurrencyToggle('USD')}
+                    className={`px-3 py-1 text-sm font-medium rounded-l-md transition ${
+                      currency === 'USD'
+                        ? 'bg-shakepay-blue text-white'
+                        : 'text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    USD
+                  </button>
+                  <button
+                    onClick={() => handleCurrencyToggle('CAD')}
+                    className={`px-3 py-1 text-sm font-medium rounded-r-md transition ${
+                      currency === 'CAD'
+                        ? 'bg-shakepay-blue text-white'
+                        : 'text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    CAD
+                  </button>
+                </div>
+              </div>
               <input
                 type="number"
                 id="btcPrice"
@@ -319,7 +381,7 @@ export default function Calculator() {
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Total Value (USD)</p>
+                    <p className="text-sm text-gray-500">Total Value ({currency})</p>
                     <p className="text-2xl font-bold text-green-600">
                       {formatCurrency(result.totalValueUSD)}
                     </p>
@@ -343,7 +405,7 @@ export default function Calculator() {
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Average Value/Day (USD)</p>
+                    <p className="text-sm text-gray-500">Average Value/Day ({currency})</p>
                     <p className="text-2xl font-bold text-green-600">
                       {formatCurrency(result.averageValuePerDayUSD)}
                     </p>
@@ -357,7 +419,7 @@ export default function Calculator() {
               <h3 className="text-lg font-semibold text-gray-700 mb-4">
                 Earnings Over Time
               </h3>
-              <Chart data={result.dailyData} />
+              <Chart data={result.dailyData} currency={currency} />
             </div>
           </>
         )}

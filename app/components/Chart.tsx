@@ -14,9 +14,10 @@ import { DayData } from '../utils/calculator';
 
 interface ChartProps {
   data: DayData[];
+  currency: 'USD' | 'CAD';
 }
 
-export default function Chart({ data }: ChartProps) {
+export default function Chart({ data, currency }: ChartProps) {
   // Sample data for better visualization (every 10 days for large datasets)
   const chartData =
     data.length > 100
@@ -59,7 +60,7 @@ export default function Chart({ data }: ChartProps) {
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: currency,
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(value);
@@ -112,7 +113,7 @@ export default function Chart({ data }: ChartProps) {
             domain={usdDomain}
             tickFormatter={formatYAxis}
             label={{
-              value: 'Total Value (USD)',
+              value: `Total Value (${currency})`,
               angle: 0,
               position: 'top',
               offset: 20,
@@ -144,7 +145,7 @@ export default function Chart({ data }: ChartProps) {
             stroke="#10B981"
             strokeWidth={2}
             dot={false}
-            name="Total Value (USD)"
+            name={`Total Value (${currency})`}
           />
           <Line
             yAxisId="right"
