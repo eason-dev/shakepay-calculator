@@ -137,7 +137,7 @@ export default function Calculator() {
             <div>
               <label
                 htmlFor="days"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-base font-semibold text-gray-800 mb-2"
               >
                 Streak Days
               </label>
@@ -178,7 +178,7 @@ export default function Calculator() {
                       : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                   }`}
                 >
-                  1000
+                  1,000
                 </button>
                 <button
                   onClick={() => setDaysInput('3000')}
@@ -188,7 +188,17 @@ export default function Calculator() {
                       : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                   }`}
                 >
-                  3000
+                  3,000
+                </button>
+                <button
+                  onClick={() => setDaysInput('5000')}
+                  className={`px-3 py-1.5 text-sm rounded-md transition ${
+                    daysInput === '5000'
+                      ? 'bg-shakepay-blue text-white ring-2 ring-shakepay-blue ring-offset-1'
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                  }`}
+                >
+                  5,000
                 </button>
               </div>
             </div>
@@ -197,7 +207,7 @@ export default function Calculator() {
             <div>
               <label
                 htmlFor="btcPrice"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-base font-semibold text-gray-800 mb-2"
               >
                 Bitcoin Price (USD)
                 {priceLoading && (
@@ -225,7 +235,7 @@ export default function Calculator() {
                       : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                   }`}
                 >
-                  Current ({formatNumber(currentBtcPrice)})
+                  Current
                 </button>
                 <button
                   onClick={() => setBtcPriceInput('100000')}
@@ -266,6 +276,16 @@ export default function Calculator() {
                   }`}
                 >
                   1M
+                </button>
+                <button
+                  onClick={() => setBtcPriceInput('10000000')}
+                  className={`px-3 py-1.5 text-sm rounded-md transition ${
+                    btcPriceInput === '10000000'
+                      ? 'bg-shakepay-blue text-white ring-2 ring-shakepay-blue ring-offset-1'
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                  }`}
+                >
+                  10M
                 </button>
               </div>
             </div>
